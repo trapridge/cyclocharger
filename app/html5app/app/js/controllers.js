@@ -3,8 +3,13 @@
 /* Controllers */
 
 
-function MyCtrl1() {}
-MyCtrl1.$inject = [];
+function MyCtrl1($scope) {	
+
+	$scope.alert = function() {
+		alert('Cool');
+	};
+}
+MyCtrl1.$inject = ['$scope'];
 
 
 function MyCtrl2() {
