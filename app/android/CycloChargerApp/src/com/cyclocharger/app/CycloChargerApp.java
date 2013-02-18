@@ -20,6 +20,7 @@
 package com.cyclocharger.app;
 
 import android.os.Bundle;
+import android.view.View;
 import org.apache.cordova.*;
 
 public class CycloChargerApp extends DroidGap
@@ -31,6 +32,13 @@ public class CycloChargerApp extends DroidGap
         // Set by <content src="index.html" /> in config.xml
         super.loadUrl(Config.getStartUrl());
         //super.loadUrl("file:///android_asset/www/index.html")
+
+        super.appView.setOnLongClickListener(new View.OnLongClickListener() {
+
+            public boolean onLongClick(View v) {
+                return true;
+            }
+        });
     }
 }
 
