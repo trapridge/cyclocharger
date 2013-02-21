@@ -209,11 +209,12 @@ public class BluetoothPlugin extends Plugin {
 			else if( ACTION_READ.equals(action) ) {
 				try {
 					int socketId = args.getInt(0);
-					
+					int bufferSize = args.getInt(1);
+
 					BluetoothSocket bluetoothSocket = m_bluetoothSockets.get(socketId);
 					InputStream inputStream = bluetoothSocket.getInputStream();
 					
-					char[] buffer = new char[128];
+					char[] buffer = new char[bufferSize];
 					for( int i = 0; i < buffer.length; i++ ) {
 						buffer[i] = (char) inputStream.read();
 					}

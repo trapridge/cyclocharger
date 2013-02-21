@@ -2,7 +2,23 @@
 
 angular.module('myApp.services', []).
 
-    factory('cordovaReady', function() {
+    factory('safeApply', function ($rootScope) {
+        return function (fn) {
+            var phase = $rootScope.$$phase;
+            if(phase == '$apply' || phase == '$digest') {
+                if(fn && (typeof(fn) === 'function')) {
+
+                    console.log('Skipping a digest cycle. This may be a problem...');
+
+                    fn();
+                }
+            } else {
+                $rootScope.$apply(fn);
+            }
+        }
+    }).
+
+    factory('enqueueAndRunCordovaRequest', function() {
 	  	return function (fn) {	  
     	    var queue = [];
     	    var impl = function () {
@@ -11,7 +27,8 @@ angular.module('myApp.services', []).
     	    
     	    document.addEventListener('deviceready', function () {
                 queue.forEach(function (args) {
-    	           fn.apply(this, args);
+                    console.log('Calling cordova from queue!');
+    	            fn.apply(this, args);
                 });
                 impl = fn;
     	    }, false);
@@ -22,26 +39,32 @@ angular.module('myApp.services', []).
         };
 	}).
 
-    factory('notification', function ($rootScope, cordovaReady) {
+
+    factory('notification', function ($rootScope, enqueueAndRunCordovaRequest) {
         return {
-            alert: function (message, alertCallback, title, buttonName) {
+            alert: enqueueAndRunCordovaRequest(function (message, alertCallback, title, buttonName) {
                 navigator.notification.alert.apply(this, arguments);
-            }
-        };
+            })
+        }
     }).
 
-    factory('bluetooth', function ($rootScope, cordovaReady) {
+
+    factory('bluetooth', function ($rootScope, enqueueAndRunCordovaRequest, safeApply) {
 
         var bt = cordova.require('cordova/plugin/bluetooth');
 
         return {
-            connect: function(onSuccess, onError, address, id) {
+            connect: enqueueAndRunCordovaRequest(function (onSuccess, onError, address, id) {
+
+                console.log("Connecting to: " + address);
+
                 bt.connect(function() {
                     var that = this,
                         args = arguments;
                       
                     if (onSuccess) {
-                        $rootScope.$apply(function () {
+                        // $rootScope.$apply(function () {
+                        safeApply(function() {
                             onSuccess.apply(that, args);
                         });
                     }
@@ -50,19 +73,22 @@ angular.module('myApp.services', []).
                         args = arguments;
                   
                     if (onError) {
-                        $rootScope.$apply(function () {
+                        // $rootScope.$apply(function () {
+                        safeApply(function() {
                             onError.apply(that, args);
                         });
                     }
                 }, address, id);
-            },
-            disconnect: function(onSuccess, onError, socketId) {
+            }),
+   
+            disconnect: enqueueAndRunCordovaRequest(function (onSuccess, onError, socketId) {
                 bt.disconnect(function() {
                     var that = this,
                         args = arguments;
                       
                     if (onSuccess) {
-                        $rootScope.$apply(function () {
+                        // $rootScope.$apply(function () {
+                        safeApply(function() {
                             onSuccess.apply(that, args);
                         });
                     }
@@ -71,19 +97,22 @@ angular.module('myApp.services', []).
                         args = arguments;
                   
                     if (onError) {
-                        $rootScope.$apply(function () {
+                        // $rootScope.$apply(function () {
+                        safeApply(function() {
                             onError.apply(that, args);
                         });
                     }
                 }, socketId);
-            },
-            read: function(onSuccess, onError, socketId) {
+            }),
+
+            read: enqueueAndRunCordovaRequest(function (onSuccess, onError, socketId, bufferSize) {
                 bt.read(function() {
                     var that = this,
                         args = arguments;
                       
                     if (onSuccess) {
-                        $rootScope.$apply(function () {
+                        // $rootScope.$apply(function () {
+                        safeApply(function() {
                             onSuccess.apply(that, args);
                         });
                     }
@@ -92,13 +121,14 @@ angular.module('myApp.services', []).
                         args = arguments;
                   
                     if (onError) {
-                        $rootScope.$apply(function () {
+                        // $rootScope.$apply(function () {
+                        safeApply(function() {
                             onError.apply(that, args);
                         });
                     }
-                }, socketId);
-            }
-        };
+                }, socketId, bufferSize);
+            })
+        }
     }).
 
     factory('sensor', function (bluetooth) {
@@ -128,7 +158,7 @@ angular.module('myApp.services', []).
                     onSuccess(data);
                 }, function(error) {
                     onError(error);
-                }, socketId);
+                }, socketId, '8');
             } 
-        };
+        }
     });

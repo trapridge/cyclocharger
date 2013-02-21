@@ -10,7 +10,9 @@
         <link rel="stylesheet" href="css/bootstrap.min.css">
         <link rel="stylesheet" href="css/bootstrap-responsive.min.css">
         <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="css/angular-ui.css">
         <style>
+
             /*
             body {
                 padding-top: 60px;
@@ -77,6 +79,8 @@
 
             <!-- Main hero unit for a primary marketing message or call to action -->
             <div class="hero-unit" ng-controller="MyCtrl1">
+
+                <p><super-button foo="name" func="test(someValue)"></super-button></p>
                 <!--
                 <h1>Hi!</h1>
                 <p><Tap the button for geolocation data!</p>
@@ -87,7 +91,33 @@
                 <p><a id="connect" ng-click="connect()" class="btn btn-primary btn-large">Connect to sensor at {{device}}</a></p>
                 <p><a id="disconnect" ng-click="disconnect()" class="btn btn-primary btn-large">Disconnect from sensor</a></p>
                 <p><a id="data" ng-click="getValue()" class="btn btn-primary btn-large">Get data</a></p>
-                <p>{{data}}</p>
+
+
+                <textarea rows="3">{{data}}</textarea>
+
+                
+<hr/>
+
+<!--
+                <div class="btn-group" bs-buttons-checkbox>
+  <button type="button" class="btn" ng-model="checkbox.left">...</button>
+  <button type="button" class="btn" ng-model="checkbox.middle">...</button>
+  <button type="button" class="btn" ng-model="checkbox.right">...</button>
+</div>
+<hr/>
+
+<div class="alert fade" bs-alert><strong>Hey!</strong> This is a static alert.</div>
+
+<hr/>
+
+
+<div class="control-group input-append">
+  <input type="text" ng-model="datepicker.date" data-date-format="dd/mm/yyyy" bs-datepicker>
+  <button type="button" class="btn" data-toggle="datepicker"><i class="icon-calendar"></i></button>
+</div>
+
+<hr/>
+-->
             </div>
 
             <!-- Example row of columns -->
@@ -138,7 +168,11 @@
         <script src="js/directives.js"></script>
 
         <script src="js/vendor/bootstrap.js"></script>
-
+        <!--
+        <script src="js/vendor/bootstrap-datepicker.js"></script>
+        <script src="js/vendor/angular-strap.js"></script>
+        <script src="js/vendor/angular-ui.js"></script>
+-->
         <script src="js/main.js"></script>
     </body>
 </html>

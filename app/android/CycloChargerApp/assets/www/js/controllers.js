@@ -1,11 +1,17 @@
 'use strict';
 
-MyCtrl1.$inject = ['$scope', 'notification', 'sensor'];
-function MyCtrl1($scope, notification, sensor) {	
+MyCtrl1.$inject = ['$scope', 'notification', 'sensor', '$timeout'];
+function MyCtrl1($scope, notification, sensor, $timeout) {	
+
+	$scope.name = 'World';
 
 	$scope.data = 'data here';
 	$scope.data += '...';
 	$scope.device = '7C:D1:C3:F4:83:A4';
+
+	$scope.test = function(s) {
+		alert(s);
+	}
 
 	$scope.connect = function() {
 		sensor.connect(function() {
@@ -44,16 +50,16 @@ function MyCtrl1($scope, notification, sensor) {
 	}
 
 	$scope.getValue = function() {
-
-		//alert('about to read')
-
 		sensor.getValue(read, function(error) {
-			alert(error);
+			console.log(error);
 		});
 	}
 
 	function read(data) {
-		$scope.data += data;	
-		$scope.getValue();
+		$timeout(function() {
+			$scope.data = '\n' + $scope.data;
+			$scope.data = data + $scope.data;
+			$scope.getValue();
+		}, 100);
 	}
 }

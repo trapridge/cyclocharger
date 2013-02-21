@@ -96,8 +96,8 @@ cordova.define("cordova/plugin/bluetooth", function(require, exports, module) {
 	 * @param successCallback function to be called when reading was successfull. Passed parameter is a string containing the read content
 	 * @param errorCallback function to be called when there was a problem while reading
 	 */
-	Bluetooth.prototype.read = function(successCallback,failureCallback,socketid) {
-	    return exec(successCallback, failureCallback, 'BluetoothPlugin', 'read', [socketid]);
+	Bluetooth.prototype.read = function(successCallback,failureCallback,socketid,bufferSize) {
+	    return exec(successCallback, failureCallback, 'BluetoothPlugin', 'read', [socketid, bufferSize]);
 	}
 	
 	var bluetooth = new Bluetooth();
