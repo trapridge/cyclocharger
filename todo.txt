@@ -1,0 +1,6 @@
+todo:
+
+setup grunt
+	lint
+	tests
+	copying to assets
