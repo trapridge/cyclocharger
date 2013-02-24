@@ -63,6 +63,9 @@ angular.module('myApp.services', []).
                         args = arguments;
                       
                     if (onSuccess) {
+
+                        console.log("Connected to " + address);
+
                         // $rootScope.$apply(function () {
                         safeApply(function() {
                             onSuccess.apply(that, args);
@@ -106,6 +109,9 @@ angular.module('myApp.services', []).
             }),
 
             read: enqueueAndRunCordovaRequest(function (onSuccess, onError, socketId, bufferSize) {
+
+                console.log("Preparing to read over bluetooth");
+
                 bt.read(function() {
                     var that = this,
                         args = arguments;

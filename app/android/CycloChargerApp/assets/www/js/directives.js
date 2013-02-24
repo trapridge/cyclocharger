@@ -60,9 +60,6 @@ angular.module('myApp.directives', []).
                 // });
 
                 elem.children().bind('click', function() {
-
-console.log("EREREWREWREWRWEREREWREWRWRER")
-
                     scope.reverseName();
                     scope.$apply();
                     scope.func({someValue:'testing'});
